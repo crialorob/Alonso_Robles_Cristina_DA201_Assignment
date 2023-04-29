@@ -460,3 +460,55 @@ nc[['sub_icb_location_name', 'count_of_appointments']].value_counts()
 
 nc.sort_values(by=['count_of_appointments'], ascending=False)
 
+
+# In[1]:
+
+
+# Import pandas.
+import pandas as pd
+
+# Read the Excel file.
+# Assign a variable.
+# Use the pd.read_excel() function.
+# Specify the name of the Excel file.
+nc = pd.read_excel('national_categories.xlsx')
+
+# Print the DataFrame.
+nc
+
+
+# In[2]:
+
+
+nc.shape
+
+
+# In[18]:
+
+
+nc.groupby(['sub_icb_location_name']).value_counts().reset_index(name='count')
+
+
+# In[29]:
+
+
+locations_count = nc.groupby(['sub_icb_location_name']).count()
+locations_count
+
+
+# In[45]:
+
+
+# Determine the five locations with the highest number of records.
+locations_count = pd.DataFrame(nc.groupby(['sub_icb_location_name']).count())
+locations_count
+locations_count.sort_values(['icb_ons_code'],ascending=False)
+top_5_locations = locations_count.sort_values(['icb_ons_code'],ascending=False)
+top_5_locations.head()
+
+
+# In[ ]:
+
+
+
+
