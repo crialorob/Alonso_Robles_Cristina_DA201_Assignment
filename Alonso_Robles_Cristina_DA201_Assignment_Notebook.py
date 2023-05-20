@@ -1005,6 +1005,12 @@ nc_ss = nc_ss_subset.sort_values(['total_monthly_appointments'],ascending=False)
 nc_ss
 
 
+# In[ ]:
+
+
+
+
+
 # **Service settings:**
 
 # In[13]:
@@ -1295,7 +1301,7 @@ tweets_text = pd.read_csv('tweets.csv',
 tweets_text.head()
 
 
-# In[40]:
+# In[203]:
 
 
 # Loop through the messages, and create a list of values containing the # symbol.
@@ -1320,6 +1326,12 @@ print(tags)
 tags.head(30)
 
 
+# In[223]:
+
+
+hashtags_df.info()
+
+
 # In[26]:
 
 
@@ -1328,11 +1340,22 @@ tags = pd.DataFrame(tweets_text.groupby(['tweet_full_text']).count())
 tags.head(30)
 
 
-# In[33]:
+# In[ ]:
 
 
-# Determine the number of service settings from the 'nc' DataFrame.
-print(len(tweets_text['tweet_full_text'].unique()))
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[36]:
@@ -1375,13 +1398,13 @@ tweets_text[tags_healthcare].shape
 
 # ### A total of 842 hashtags contain the word 'healthcare'. Originally there were 961 unique comments in the tweet_full_text column. Therefore, 87.6% of the tweets contain the word 'healthcare.
 
-# In[61]:
+# In[204]:
 
 
 # Create a Pandas Series to count the values in the list. Set the Series equal to tags.
 tags = pd.Series(top_trending_hashtags)
 print(tags)
-tags.head(30)
+tags.head()
 
 
 # In[63]:
@@ -1390,7 +1413,7 @@ tags.head(30)
 print(type(tags))
 
 
-# In[72]:
+# In[200]:
 
 
 # Convert the series to a DataFrame in preparation for visualisation.
@@ -1421,7 +1444,7 @@ top_trending_hashtags = pd.DataFrame(frame)
 print(top_trending_hashtags)
 
 
-# In[88]:
+# In[201]:
 
 
 # Count the number of hashtags per tweet_full_text.
@@ -1434,7 +1457,7 @@ top_trending_hashtags = top_trending_hashtags.sort_values(['Count'],ascending=Fa
 top_trending_hashtags
 
 
-# In[91]:
+# In[226]:
 
 
 # Convert the series to a DataFrame in preparation for visualisation.
@@ -1461,40 +1484,40 @@ top_trending_hashtags = pd.DataFrame(frame)
 print(top_trending_hashtags)
 
 
-# In[104]:
+# In[229]:
+
+
+# Convert the series to a DataFrame in preparation for visualisation.
+# Creating two lists.
+
+import numpy as np
+
+word = [tags]
+
+# Creating two series by passing lists.
+word_series = pd.Series(word)
+
+# Creating a dictionary by passing Series objects as values.
+frame = {'Word': tags}
+
+# Creating DataFrame by passing Dictionary.
+top_trending_hashtags = pd.DataFrame(frame)
+ 
+# Printing elements of Dataframe
+print(top_trending_hashtags)
+
+
+# In[233]:
 
 
 # Count the number of unique hashtags.
-top_trending_unique_hashtags = top_trending_hashtags.groupby(['Word']).count()
-top_trending_unique_hashtags.sort_values(['Count'],ascending=False)
-
-# View the output.
-top_trending_unique_hashtags
+top_trending_unique_hashtags = top_trending_hashtags.groupby(['Word']).value_counts().reset_index(name='Count')
+top_trending_unique_hashtags.sort_values(by=['Count'], ascending=False)
 
 
-# In[110]:
+# # Continue Here
 
-
-top_trending_unique_hashtags = pd.DataFrame(top_trending_hashtags.groupby(['Word' ,'Count']).Count.sum().reset_index(name='total_#'))
-top_trending_unique_hashtags.head(50)
-
-
-# In[122]:
-
-
-top_trending_unique_hashtags = top_trending_hashtags.groupby(['Word']).count()
-top_trending_unique_hashtags.sort_values(['Count'],ascending=False)
-
-
-# In[123]:
-
-
-# View the output.
-top_trending_unique_hashtags
-print(len(top_trending_unique_hashtags['Word'].nunique()))
-
-
-# In[105]:
+# In[236]:
 
 
 # Ensure the count data type is an integer for data analysis.
@@ -1510,156 +1533,341 @@ print(top_trending_unique_hashtags.dtypes)
 # View the result.
 
 
-# In[ ]:
+# In[241]:
 
 
 # Display records where the count is larger than 10.
+top_trending_unique_hashtags = top_trending_unique_hashtags[top_trending_unique_hashtags['Count'] >10]
+
+# Sort the data by asceinding order.
+top_trending_unique_hashtags = top_trending_unique_hashtags.sort_values(['Count'],ascending=False)
+top_trending_unique_hashtags
+
+
+# In[243]:
+
+
+# Import Matplotlib, Seaborn, and Pandas.
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.dates import *
 
 
 # In[ ]:
+
+
+
+
+
+# In[258]:
 
 
 # Create a Seaborn barplot indicating records with a count >10 records.
+sns.barplot(x='Word', y='Count', 
+            data=top_trending_unique_hashtags).set_title("Top Trending Hashtags", fontsize=16, y=0.92)
 
 
-# In[ ]:
+# In[266]:
 
 
-# Create the plot.
+fig, ax = plt.subplots()
 
+sns.barplot(x='Word', y='Count', 
+            data=top_trending_unique_hashtags).set_title("Top Trending Hashtags", fontsize=16, y=0.92)
 
-# View the barplot.
+x_labels = top_trending_unique_hashtags['Word']
+
+ax.set_xticklabels(x_labels, rotation=90)
+
+plt.show()
 
 
 # # 
 
 # # Assignment activity 6
 
-# ### Investigate the main cencerns posed by the NHS. 
+# ### Investigate the main cencerns posted by the NHS. 
 
-# In[ ]:
+# In[267]:
 
 
 # Prepare your workstation.
 # Load the appointments_regional.csv file.
+ar = pd.read_csv('appointments_regional.csv')
+
+# View the first five rows of the DataFrame.
+ar.head(5)
 
 
-# View the DataFrame.
+# In[268]:
 
 
-# In[ ]:
+# Print the min date.
+print(ar['appointment_month'].min())
+ar.head()
 
 
-# Print the min and max dates.
+# In[269]:
 
 
-# In[ ]:
+# Print the min date.
+print(ar['appointment_month'].max())
+ar.tail()
+
+
+# In[270]:
+
+
+# View the data type of the ar DateFrame.
+print(ar.dtypes)
+
+
+# In[271]:
+
+
+# Change the date format of ar['appointment_month'].
+ar['appointment_month'] = pd.to_datetime(ar['appointment_month'])
+
+# View the ar DataFrame and columns to determine the format of the dates.
+print(ar.dtypes)
+
+
+# In[272]:
 
 
 # Filter the data set to only look at data from 2021-08 onwards.
+ar = ar.loc[(ar['appointment_month'] >= '2021-08')]
+                    
+# View the filtered DataFrame.
+ar
 
 
 # **Question 1:** Should the NHS start looking at increasing staff levels? 
 
-# In[ ]:
+# In[274]:
 
 
 # Create an aggregated data set to review the different features.
+# Determine the total number of appointments per month.
 
+ar_agg = pd.DataFrame(ar.groupby(['appointment_month','hcp_type', 'appointment_status','appointment_mode', 'time_between_book_and_appointment']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+ar_agg.sort_values(['total_monthly_appointments'],ascending=False)
+
+# View the new aggregated DataFrame.
+ar_agg
+
+
+# In[285]:
+
+
+# Create a new DataFrame (e.g. ar_df) to determine the total number of appointments per month.
+ar_df = pd.DataFrame(ar.groupby(['appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+ar_df.sort_values(['total_monthly_appointments'],ascending=False)
 
 # View the DataFrame.
+ar_df
 
 
-# In[ ]:
+# In[278]:
 
 
-# Determine the total number of appointments per month.
+# View the data type of the ar DateFrame.
+print(ar_df.dtypes)
+
+
+# In[308]:
 
 
 # Add a new column to indicate the average utilisation of services.
 # Monthly aggregate / 30 to get to a daily value.
+ar_ut = ar_df['utilisation'] = ar_df['total_monthly_appointments']/30
+ar_ut
 
+
+# In[309]:
+
+
+# Rounding the utilisation column.
+ar_ut = ar_df[['appointment_month', 'total_monthly_appointments', 'utilisation']].round()
+ar_ut
+
+
+# ##### Important to note! The NHS can accommodate a maximum of 1,200,000 appointments per day.
+
+# In[310]:
+
+
+# View the data type of the ar DateFrame.
+print(ar_df.dtypes)
 
 # View the DataFrame.
+ar_df
 
 
-# In[ ]:
+# In[311]:
+
+
+# Convert the appointment_month to string data type for ease of visualisation.
+from datetime import datetime
+
+date_columns = ar_df.select_dtypes(include=['datetime64']).columns.tolist()
+ar_df[date_columns] = ar_df[date_columns].astype(str)
+
+
+# In[312]:
+
+
+# View the data type of the ar DateFrame.
+print(ar_df.dtypes)
+
+
+# In[313]:
 
 
 # Plot sum of count of monthly visits.
-# Convert the appointment_month to string data type for ease of visualisation.
-
-
 # Create a lineplot with Seaborn.
 
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', 
+             data=ar_df).set_title("Total Appointments by Month", fontsize=16, y=0.92)
 
-# In[ ]:
+
+# In[314]:
+
+
+# View the DataFrame.
+ar_ut
+
+
+# In[316]:
 
 
 # Plot monthly capacity utilisation.
 
-
 # Create a lineplot.
+sns.lineplot(x='appointment_month', y='utilisation', 
+             data=ar_ut).set_title("Monthly Capacity Utilisation", fontsize=16, y=0.92)
 
 
 # **Question 2:** How do the healthcare professional types differ over time?
 
-# In[ ]:
+# In[317]:
+
+
+# View the new aggregated DataFrame.
+ar_agg
+
+
+# In[318]:
+
+
+# View the data type of the ar DateFrame.
+print(ar_agg.dtypes)
+
+
+# In[319]:
+
+
+# Convert the appointment_month to string data type for ease of visualisation.
+
+date_columns = ar_agg.select_dtypes(include=['datetime64']).columns.tolist()
+ar_agg[date_columns] = ar_agg[date_columns].astype(str)
+
+
+# In[320]:
+
+
+# View the data type of the ar DateFrame.
+print(ar_agg.dtypes)
+
+
+# In[328]:
 
 
 # Create a line plot to answer the question.
+
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='hcp_type', errorbar=None,
+             data=ar_agg).set_title("Healthcare Professional Types Performance Over Time", fontsize=16, y=1)
 
 
 # **Question 3:** Are there significant changes in whether or not visits are attended?
 
-# In[ ]:
+# In[332]:
 
 
 # Create a line plot to answer the question.
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='appointment_status', errorbar=None,
+             data=ar_agg).set_title("Appointments Status Over Time", fontsize=16, y=1)
 
 
 # **Question 4:** Are there changes in terms of appointment type and the busiest months?
 
-# In[ ]:
+# In[337]:
 
 
 # Create a line plot to answer the question.
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='appointment_mode', errorbar=None,
+             data=ar_agg).set_title("Appointment Type", fontsize=16, y=1)
 
 
 # **Question 5:** Are there any trends in time between booking an appointment?
 
-# In[ ]:
+# In[335]:
 
 
 # Create a line plot to answer the question.
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='time_between_book_and_appointment', errorbar=None,
+             data=ar_agg).set_title("Time Between Booking & Appointment", fontsize=16, y=1)
 
 
 # **Question 6:** How do the spread of service settings compare?
 
-# In[ ]:
+# In[340]:
+
+
+# Specify the name of the Excel file.
+nc = pd.read_excel('national_categories.xlsx')
+
+# Print the top 5 raws of the nc DataFrame.
+nc.head()
+
+
+# In[344]:
 
 
 # Let's go back to the national category DataFrame you created in an earlier assignment activity.
-
-
-# In[ ]:
-
-
-# Create a new DataFrame consisting of the month of appointment and the number of appointments.
+# To determine the total number of appointments per month per service setting.
+nc_ss = pd.DataFrame(nc.groupby(['appointment_month','service_setting']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+nc_ss.sort_values(['total_monthly_appointments'],ascending=False)
 
 # View the DataFrame.
+nc_ss
 
 
-# In[1]:
+# In[345]:
 
 
 # Create a boxplot to investigate spread of service settings.
 
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='service_setting', errorbar=None,
+             data=nc_ss).set_title("Spread Of Service Settings Over Time", fontsize=16, y=1)
 
-# In[ ]:
+
+# In[347]:
 
 
 # Create a boxplot to investigate the service settings without GP.
+nc_ss_without_GP = nc_ss[nc_ss['service_setting'] != 'General Practice']
+nc_ss_without_GP
+
+
+# In[349]:
+
+
+# Create a boxplot based on the order of variables.
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='service_setting', errorbar=None,
+             data=nc_ss_without_GP).set_title("Spread Of Service Settings Over Time - Without GP", fontsize=16, y=1)
 
 
 # # 
