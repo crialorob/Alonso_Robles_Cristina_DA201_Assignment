@@ -755,7 +755,7 @@ new_total_m_apt_nc_ar_ad.duplicated()
 # #### Even though I already gave answers to the following questions by looking at each DataFrame individually.
 # #### I want to see the outputs generated from the new merged DataFrame.
 
-# #### Between what dates were appointments scheduled?
+# #### 2. Between what dates were appointments scheduled?
 
 # In[83]:
 
@@ -1136,7 +1136,7 @@ sns.lineplot(x='month', y='total_monthly_appointments', hue= 'national_category'
 
 # **Summer (August 2021):**
 
-# In[43]:
+# In[70]:
 
 
 # View the output.
@@ -1145,53 +1145,53 @@ print(nc_ss.dtypes)
 nc_ss
 
 
-# In[63]:
+# In[76]:
 
 
 # Look at August 2021 in more detail to allow a closer look.
 # Create a lineplot.
 summer = nc_ss.query("appointment_month =='2021-08'")
-sns.lineplot(data=summer, x="appointment_date", y="total_monthly_appointments", ci=0).set_title("Summer 2021 - Appointments")
+sns.lineplot(data=summer, x="appointment_date", y="total_monthly_appointments", hue='service_setting', errorbar=('ci', 0)).set_title("Summer 2021 - Appointments")
 
 
 # **Autumn (October 2021):**
 
-# In[62]:
+# In[75]:
 
 
 # Look at October 2021 in more detail to allow a closer look.
 # Create a lineplot.
 autumn = nc_ss.query("appointment_month =='2021-10'")
-sns.lineplot(data=autumn, x="appointment_date", y="total_monthly_appointments", ci=0).set_title("Autumn 2021 - Appointments")
+sns.lineplot(data=autumn, x="appointment_date", y="total_monthly_appointments", hue= 'service_setting', errorbar=('ci', 0)).set_title("Autumn 2021 - Appointments")
 
 
 # **Winter (January 2022):**
 
-# In[61]:
+# In[74]:
 
 
 # Look at January 2022 in more detail to allow a closer look.
 # Create a lineplot.
 winter = nc_ss.query("appointment_month =='2022-01'")
-sns.lineplot(data=winter, x="appointment_date", y="total_monthly_appointments", ci=0).set_title("Winter 2022 - Appointments")
+sns.lineplot(data=winter, x="appointment_date", y="total_monthly_appointments", hue='service_setting', errorbar=('ci', 0)).set_title("Winter 2022 - Appointments")
 
 
 # **Spring (April 2022):**
 
-# In[60]:
+# In[77]:
 
 
 # Look at April 2022 in more detail to allow a closer look.
 # Create a lineplot.
 spring = nc_ss.query("appointment_month =='2022-04'")
-sns.lineplot(data=spring, x="appointment_date", y="total_monthly_appointments", ci=0).set_title("Spring 2022 - Appointments")
+sns.lineplot(data=spring, x="appointment_date", y="total_monthly_appointments", hue='service_setting', errorbar=('ci', 0)).set_title("Spring 2022 - Appointments")
 
 
 # # Assignment activity 5
 
 # ### Analyse tweets from Twitter with hashtags related to healthcare in the UK.
 
-# In[ ]:
+# In[1]:
 
 
 # Libraries and settings needed for analysis
@@ -1208,62 +1208,297 @@ sns.set_style('white')
 pd.options.display.max_colwidth = 200
 
 
-# In[ ]:
+# In[2]:
 
 
 # Load the data set.
-
+tweets = pd.read_csv('tweets.csv')
 
 # View the DataFrame.
+tweets.head()
 
 
-# In[ ]:
+# In[3]:
 
 
 # Explore the metadata.
+print(tweets.columns)
+print(tweets.shape)
+print(tweets.dtypes)
+tweets.info()
 
 
-# In[ ]:
+# In[4]:
 
 
-# Explore the data set.
+# Determine the descriptive statistics of the tweets data set. Explore the data set.
+tweets.describe()
 
 
-# In[ ]:
+# In[5]:
+
+
+# Searching for duplicates values in the ar DataFrame.
+# No duplicates were found to be duplicated.
+tweets.duplicated()
+
+
+# In[6]:
+
+
+# Adding a new column to the ar dataframe that states whether the row is a duplicate.
+tweets2 = tweets.copy()
+tweets2['duplicated'] = tweets2.duplicated()
+tweets2
+
+
+# In[7]:
+
+
+# De-duplicate the tweets DataFrame using drop_duplicates().
+# I decided to remove the 205 raws that were found to be duplicated in the tweets DataFrame.
+tweets = tweets.drop_duplicates()
+tweets.shape
+
+
+# In[8]:
 
 
 # Would it be useful to only look at retweeted and favourite tweet messages?
 # Explain your answer.
+# I think that sorting these two columns by the higuest number of retweets and the most favourite tweets will enable me to identify the most popular tweets by number of retweets and number of times that people marked them as favorites. 
+# Afterwards, we will be able to look at the full text and hashtags used.
 
 
-# In[ ]:
+# In[9]:
 
 
-# Create a new DataFrame containing only the text.
+# Sorting the data by 'tweet_retweet_count' to find the tweets with the highest number of retweets.
+tweets.sort_values(by=['tweet_retweet_count'], ascending=False)
 
 
-# View the DataFrame.
+# In[10]:
 
 
-# In[ ]:
+# Sorting the data by 'tweet_favorite_count' to find the tweets that were marked the most as favorite.
+tweets.sort_values(by=['tweet_favorite_count'], ascending=False)
+
+
+# In[11]:
+
+
+# Create a new DataFrame containing only the text, selecting only 'tweet_full_text'.
+tweets_text = pd.read_csv('tweets.csv', 
+                            usecols=['tweet_full_text'])
+
+# Print the first 5 raws of the DataFrame.
+tweets_text.head()
+
+
+# In[40]:
 
 
 # Loop through the messages, and create a list of values containing the # symbol.
+tags = list()
+for y in [x.split(' ') for x in tweets['tweet_full_text'].values]:
+    for z in y:
+        if '#' in z:
+            # Change to lowercase.
+            tags.append(z.lower())
+            
+# View the output.
+top_trending_hashtags = tags
+top_trending_hashtags
 
 
-# In[ ]:
+# In[57]:
 
 
-# Display the first 30 records.
+# Create a Pandas Series to count the values in the list. Set the Series equal to tags.
+tags = pd.Series(top_trending_hashtags)
+print(tags)
+tags.head(30)
 
 
-# In[ ]:
+# In[26]:
+
+
+# Create a Pandas Series to count the values in the list. Set the Series equal to tags.                                 
+tags = pd.DataFrame(tweets_text.groupby(['tweet_full_text']).count())
+tags.head(30)
+
+
+# In[33]:
+
+
+# Determine the number of service settings from the 'nc' DataFrame.
+print(len(tweets_text['tweet_full_text'].unique()))
+
+
+# In[36]:
+
+
+# Create a user-defined function using the def keyword.
+# Name the function as contains_healthcare.
+# Specify the named parameter as (x).
+# Specify what the function should do. For example, does the product contain the word matches in their description?. 
+# The triple quotation marks (""" """) indicates to Python it is a docstring.
+# The second line of code indicates that y is testing the parameter (x.lower()). 
+# For example, identify whether the lower case word healthcare is in the function x. 
+# Specify the return keyword to execute the function. For example, does the lower case word matches appear in y?.
+
+def contains_healthcare(x):
+    """ does the tweet full text contain #healthcare? """
+    y = x.lower()
+    return "#healthcare" in y
+
+# Print the function by testing various options of the word matches. 
+# For example, matches and Matches.
+# View the output.
+print(contains_healthcare(x="#healthcare"))
+print(contains_healthcare(x="#Healthcare"))
+
+
+# In[38]:
+
+
+# Use the apply() function.
+tags_healthcare = tweets_text["tweet_full_text"].apply(contains_healthcare)
+
+# View the DataFrame.
+print(tags_healthcare)
+
+# Filter the DataFrame.
+tweets_text[tags_healthcare]
+tweets_text[tags_healthcare].shape
+
+
+# ### A total of 842 hashtags contain the word 'healthcare'. Originally there were 961 unique comments in the tweet_full_text column. Therefore, 87.6% of the tweets contain the word 'healthcare.
+
+# In[61]:
+
+
+# Create a Pandas Series to count the values in the list. Set the Series equal to tags.
+tags = pd.Series(top_trending_hashtags)
+print(tags)
+tags.head(30)
+
+
+# In[63]:
+
+
+print(type(tags))
+
+
+# In[72]:
 
 
 # Convert the series to a DataFrame in preparation for visualisation.
+# Creating two lists.
+
+import numpy as np
+
+word = ['#healthcare', '#premisehealth', '#hiring', '#healthcare', '🚨#new:🚨', 'look!\n\n#blogs', 
+        '#digitaltransformation', '#cybersecurity', '#accounting', '#finance', '#healthcare', 
+        '#firstcoastcna', '#cnaexam', '#cnaexampreparation','#jacksonville', '#cnatraining', '#nurse', 
+        '#nursing', '#nurselife', '#nursepractitioner','#nurseproblems', '#nursingschool','#healthcare', 
+        '🚨#new:🚨', '#disparities','@karahartnett\n#healthcare','#alert', '#insurance', '#data', '#healthcare']
+
+count = []
+
+# Creating two series by passing lists.
+word_series = pd.Series(word)
+count_series = pd.Series(dtype=np.int64)
+
+# Creating a dictionary by passing Series objects as values.
+frame = {'Word': word_series,
+         'Count': count_series}
+
+# Creating DataFrame by passing Dictionary.
+top_trending_hashtags = pd.DataFrame(frame)
+ 
+# Printing elements of Dataframe
+print(top_trending_hashtags)
 
 
-# Rename the columns.
+# In[88]:
+
+
+# Count the number of hashtags per tweet_full_text.
+top_trending_hashtags = top_trending_hashtags.groupby(['Word']).count()
+
+top_trending_hashtags.sort_values(['Count'],ascending=False)
+top_trending_hashtags = top_trending_hashtags.sort_values(['Count'],ascending=False)
+
+# View the output.
+top_trending_hashtags
+
+
+# In[91]:
+
+
+# Convert the series to a DataFrame in preparation for visualisation.
+# Creating two lists.
+
+import numpy as np
+
+word = [tags]
+
+count = []
+
+# Creating two series by passing lists.
+word_series = pd.Series(word)
+count_series = pd.Series(dtype=np.int64)
+
+# Creating a dictionary by passing Series objects as values.
+frame = {'Word': tags,
+         'Count': count_series}
+
+# Creating DataFrame by passing Dictionary.
+top_trending_hashtags = pd.DataFrame(frame)
+ 
+# Printing elements of Dataframe
+print(top_trending_hashtags)
+
+
+# In[104]:
+
+
+# Count the number of unique hashtags.
+top_trending_unique_hashtags = top_trending_hashtags.groupby(['Word']).count()
+top_trending_unique_hashtags.sort_values(['Count'],ascending=False)
+
+# View the output.
+top_trending_unique_hashtags
+
+
+# In[110]:
+
+
+top_trending_unique_hashtags = pd.DataFrame(top_trending_hashtags.groupby(['Word' ,'Count']).Count.sum().reset_index(name='total_#'))
+top_trending_unique_hashtags.head(50)
+
+
+# In[122]:
+
+
+top_trending_unique_hashtags = top_trending_hashtags.groupby(['Word']).count()
+top_trending_unique_hashtags.sort_values(['Count'],ascending=False)
+
+
+# In[123]:
+
+
+# View the output.
+top_trending_unique_hashtags
+print(len(top_trending_unique_hashtags['Word'].nunique()))
+
+
+# In[105]:
+
+
+# Ensure the count data type is an integer for data analysis.
+print(top_trending_unique_hashtags.dtypes)
 
 
 # In[ ]:
