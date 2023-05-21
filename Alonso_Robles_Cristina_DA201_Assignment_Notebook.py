@@ -43,29 +43,30 @@ https://github.com/crialorob/Alonso_Robles_Cristina_DA201_Assignment
 
 # ### Prepare your workstation
 
-# In[106]:
+# In[1]:
 
 
 # Import the necessary libraries.
 import pandas as pd
 import numpy as np
+import datetime
 
 # Optional - Ignore warnings.
 import warnings
 warnings.filterwarnings('ignore')
 
 
-# In[107]:
+# In[2]:
 
 
 # Import and sense-check the actual_duration.csv data set as ad.
 ad = pd.read_csv('actual_duration.csv')
 
 # View the DataFrame.
-ad
+ad.head()
 
 
-# In[108]:
+# In[3]:
 
 
 # Determine whether there are missing values.
@@ -73,32 +74,28 @@ ad_na = ad[ad.isna().any(axis=1)]
 ad_na.shape
 
 
-# In[109]:
+# In[4]:
 
 
 # Determine the sum of missing values in the 'ad' DataFrame.
 ad['actual_duration'].isnull().sum()
 
 
-# There are invalid values in the 'actual_duration' column, identified as'Unknown / Data Quality'.
+# There are invalid/erroneous values in the 'actual_duration' column, identified as'Unknown / Data Quality'.
 # 
-# Python does not identify them as missing values.
+# Python does not identify them as missing values, however I will take a look at the scale of these erroneous values for my awareness and better understanding of the quality of the data.
 
 # In[5]:
 
 
-ad['actual_duration'].isnull().sum()
-
-
-# In[6]:
-
-
 # Filter the 'ad' DataFrame according to invalid values.
-# There are invalid values in the 'actual_duration' column, identified as'Unknown / Data Quality'.
+# There are invalid values in the 'actual_duration' column, identified as 'Unknown / Data Quality'.
 ad[ad['actual_duration'].str.contains('Unknown / Data Quality')]
 
 
-# In[7]:
+# #### 20,161 (14.6%) rows from the ad DataFrame  were identified as 'Unknown / Data Quality' as the actual duration of the appointment.
+
+# In[6]:
 
 
 # Determine the metadata of the data set.
@@ -108,24 +105,24 @@ print(ad.dtypes)
 ad.info()
 
 
-# In[8]:
+# In[7]:
 
 
-# Determine the descriptive statistics of the ad data set.
+# Determine the descriptive statistics of the data set.
 ad.describe()
 
 
-# In[9]:
+# In[8]:
 
 
 # Import and sense-check the appointments_regional.csv data set as ar.
 ar = pd.read_csv('appointments_regional.csv')
 
 # View the DataFrame.
-ar
+ar.head()
 
 
-# In[10]:
+# In[9]:
 
 
 # Determine whether there are missing values.
@@ -133,13 +130,7 @@ ar_na = ar[ar.isna().any(axis=1)]
 ar_na.shape
 
 
-# There are invalid/erroneous values in the 'appointment_status' and in the 'hcp_type' columns, identified as 'Unknown'.
-# 
-# There are also invalid values in the 'time_between_book_and_appointment' column, identified as 'Unknown / Data Quality'.
-# 
-# Python does not identify them as missing values.
-
-# In[11]:
+# In[10]:
 
 
 # Determine the sum of missing values.
@@ -148,16 +139,19 @@ ar['hcp_type'].isnull().sum()
 ar['time_between_book_and_appointment'].isnull().sum()
 
 
-# In[12]:
+# There are invalid/erroneous values in the 'appointment_status' and in the 'hcp_type' columns, identified as 'Unknown'. There are also invalid values in the 'time_between_book_and_appointment' column, identified as 'Unknown / Data Quality'. Python does not identify them as missing values, however I will take a look at the scale of these erroneous values for my awareness and better understanding of the quality of the data.
+
+# In[11]:
 
 
-# Filter the 'ar' DataFrame according to invalid values 
-# This will allow me to better understand the scale of these invalid values.
+# Filter the 'ar' DataFrame according to invalid values.
 # There are invalid values in the 'appointment_status' column, identified as 'Unknown'. 
 ar[ar['appointment_status'].str.contains("Unknown")]
 
 
-# In[13]:
+# #### 201,324 (33.7%) rows from the ar DataFrame were identified as having an 'Unknown' appointment status.
+
+# In[12]:
 
 
 # Filter the 'ar' DataFrame according to invalid values.
@@ -165,7 +159,9 @@ ar[ar['appointment_status'].str.contains("Unknown")]
 ar[ar['hcp_type'].str.contains("Unknown")]
 
 
-# In[14]:
+# #### 129,228 (21.6%) rows from the ar DataFrame were identified as having an 'Unknown' Healthcare Professional Type.
+
+# In[13]:
 
 
 # Filter the 'ar' DataFrame according to invalid values.
@@ -173,9 +169,12 @@ ar[ar['hcp_type'].str.contains("Unknown")]
 ar[ar['time_between_book_and_appointment'].str.contains('Unknown / Data Quality')]
 
 
-# In[15]:
+# #### 29,687(4.9%) rows from the ar DataFrame were identified as having an 'Unknown / Data Quality' as the Time Between Book and Appointment.
+
+# In[14]:
 
 
+# Determine the metadata of the ar data set.
 # Determine the metadata of the data set.
 print(ar.columns)
 print(ar.shape)
@@ -183,24 +182,24 @@ print(ar.dtypes)
 ar.info()
 
 
-# In[16]:
+# In[15]:
 
 
 # Determine the descriptive statistics of the ar data set.
 ar.describe()
 
 
-# In[17]:
+# In[16]:
 
 
 # Import and sense-check the national_categories.xlsx data set as nc.
 nc = pd.read_excel('national_categories.xlsx')
 
 # View the DataFrame.
-nc
+nc.head()
 
 
-# In[18]:
+# In[17]:
 
 
 # Determine whether there are missing values.
@@ -208,13 +207,7 @@ nc_na = nc[nc.isna().any(axis=1)]
 nc_na.shape
 
 
-# There are invalid values in the 'service_setting' column, identified as 'Unmapped'.
-# 
-# There are also invalid values in the 'context_type' and 'national_category' columns, identified as 'Inconsistent Mapping' and 'Unmapped'.
-# 
-# Python does not identify them as missing values.
-
-# In[19]:
+# In[18]:
 
 
 # Determine the sum of missing values in the 'ar' DataFrame.
@@ -223,25 +216,29 @@ nc['context_type'].isnull().sum()
 nc['national_category'].isnull().sum()
 
 
-# In[20]:
+# There are invalid values in the 'service_setting' column, identified as 'Unmapped'. There are also invalid values in the 'context_type' and 'national_category' columns, identified as 'Inconsistent Mapping' and 'Unmapped'. Python does not identify them as missing values, however I will take a look at the scale of these erroneous values for my awareness and better understanding of the quality of the data.
+
+# In[19]:
 
 
 # Filter the 'nc' DataFrame according to invalid values.
 # There are invalid values in the 'service_setting' column, identified as 'Unmapped'.
-
 nc[nc['service_setting'].str.contains('Unmapped')]
 
 
-# In[21]:
+# #### 27,419(3.4%) rows from the nc DataFrame were identified as having an 'Unmapped'as the Service Setting of the Appointment.
+
+# In[20]:
 
 
 # Filter the 'nc' DataFrame according to invalid values.
 # There are also invalid values in the 'context_type' column, identified as 'Unmapped'.
-
 nc[nc['context_type'].str.contains('Unmapped')]
 
 
-# In[22]:
+# #### 27,419 (3.4%) rows from the nc DataFrame were identified as having an 'Unmapped'as the Context Type of the Appointment. These coincide with the number of rows that have an unmapped Service Setting too.
+
+# In[21]:
 
 
 # Filter the 'nc' DataFrame according to invalid values.
@@ -249,7 +246,9 @@ nc[nc['context_type'].str.contains('Unmapped')]
 nc[nc['context_type'].str.contains('Inconsistent Mapping')]
 
 
-# In[23]:
+# #### 89,494 (10.9%) rows from the nc DataFrame were identified as having an 'Unmapped'as the Context Type of the Appointment.
+
+# In[22]:
 
 
 # Filter the 'nc' DataFrame according to invalid values.
@@ -257,29 +256,34 @@ nc[nc['context_type'].str.contains('Inconsistent Mapping')]
 nc[nc['national_category'].str.contains('Inconsistent Mapping')]
 
 
-# In[24]:
+# #### 89,494 (10.9%) rows from the nc DataFrame were identified as having an 'Inconsistent Mapping'as the National Category of the Appointment. These coincide with the number of rows that have an unmapped Context Type too.
+
+# In[23]:
 
 
 # Filter the 'nc' DataFrame according to invalid values.
 # There are also invalid values in the 'national_category' column, identified as 'Unmapped'.
-
 nc[nc['national_category'].str.contains('Unmapped')]
 
 
-# In[25]:
+# 27,419(3.4%) rows from the nc DataFrame were identified as having an 'Unmapped'National Category of the Appointment. These coincide with the number of rows that have an unmapped Service Setting and unmapped Context Type too.
+
+# #### It might be worth further investigating these issues in the future and indentifying the ICB and Sub ICB Locations linked to these mapping errors. For the purpose of this analysis, I will continue to work with the entire data sets that contain these mapping errors to give insights to the stakeholders on the scale of the issue.
+
+# In[24]:
 
 
-# Determine the metadata of the data set.
+# Determine the metadata of the nc data set.
 print(nc.columns)
 print(nc.shape)
 print(nc.dtypes)
 nc.info()
 
 
-# In[26]:
+# In[25]:
 
 
-# Determine the descriptive statistics of the data set.
+# Determine the descriptive statistics of the nc data set.
 nc.describe()
 
 
@@ -287,11 +291,12 @@ nc.describe()
 
 # **Question 1:** How many locations are there in the data set?
 
-# In[27]:
+# In[26]:
 
 
 # Determine the number of locations.
-# Get Unique Count of Locations from the 'ad' DataFrame.
+# Get Unique Count of Locations from the 'ad' DataFrame. 
+# I checked the count of Locations in the other 2 data sets and it coincides.
 count = ad.sub_icb_location_name.unique().size
 print("Count of locations : "+ str(count))
 
@@ -300,32 +305,21 @@ print("Count of locations : "+ str(count))
 # 
 # 
 
-# In[28]:
+# In[27]:
 
 
-# Sorting the data by 'count_of_appointments' to find the 5 locations with the highest number of records.
+# Determine the top five locations based on record count.
+# Sorting the nc data set by 'count_of_appointments' to find the 5 locations with the highest number of records.
 nc.sort_values(by=['count_of_appointments'], ascending=False)
 nc.head()
-
-
-# In[29]:
-
 
 # Grouping the nc DataFrame by 'sub_icb_location_name' and counting the number of rows for each location.
 locations_count = pd.DataFrame(nc.groupby(['sub_icb_location_name']).count())
 locations_count
 
-
-# In[30]:
-
-
 # Sorting the nc DataFrame by 'icb_ons_code' in descending order. 
 # (Any of the columns could be chosen, since all of them have the same count of records).
 locations_count.sort_values(['icb_ons_code'],ascending=False)
-
-
-# In[31]:
-
 
 # Determine the top five locations based on record count.
 top_5_locations = locations_count.sort_values(['icb_ons_code'],ascending=False)
@@ -334,31 +328,31 @@ top_5_locations.head()
 
 # **Question 3:** How many service settings, context types, national categories, and appointment statuses are there?
 
-# In[32]:
+# In[28]:
 
 
-# Determine the number of service settings.
 # Determine the number of service settings from the 'nc' DataFrame.
 print(len(nc['service_setting'].unique()))
 
 
-# In[33]:
+# In[29]:
 
 
 # Determine the number of context types from the 'nc' DataFrame.
 print(len(nc['context_type'].unique()))
 
 
-# In[34]:
+# In[30]:
 
 
 # Determine the number of national categories from the 'nc' DataFrame.
 print(len(nc['national_category'].unique()))
 
 
-# In[35]:
+# In[31]:
 
 
+# Determine the number of appointment status.
 # Determine the number of appointment statuses from the 'ar' DataFrame.
 print(len(ar['appointment_status'].unique()))
 
@@ -369,78 +363,103 @@ print(len(ar['appointment_status'].unique()))
 
 # ### Continue to explore the data and search for answers to more specific questions posed by the NHS.
 
+# **Question 1:** Between what dates were appointments scheduled? 
+
+# In[32]:
+
+
+# View the first five rows of appointment_date for the ad DataFrame to determine the date format.
+print(ad.dtypes)
+ad.head()
+
+
+# In[33]:
+
+
+# Change the date format of ad['appointment_date'].
+ad['appointment_date'] = pd.to_datetime(ad['appointment_date'])
+
+# View the ar DataFrame and columns to determine the format of the dates.
+print(ad.dtypes)
+
+# View the DateFrame.
+ad.head()
+
+
+# In[34]:
+
+
+# Determine the minimum date in the ad DataFrame.
+# Use appropriate docstrings.
+# Sort column from low to high to determine. 
+print(ad['appointment_date'].sort_values())
+
+# Determine min value (statistical method).
+print(ad['appointment_date'].min())
+ad.head()
+
+
+# In[35]:
+
+
+# Determine the last date of scheduled appointments for the ad DataFrame.
+# Determine max value (statistical method).
+print(ad['appointment_date'].max())
+ad.tail()
+
+
 # In[36]:
 
 
-# Before I move on with the analysis. 
-# I would like to search for duplicates values in the ad DataFrame.
-# No duplicates were found in the ad DataFrame.
-ad.duplicated()
+# View the first five rows of appointment_date for the nc DataFrame to determine the date format.
+print(nc.dtypes)
+nc.head()
 
 
 # In[37]:
 
 
-# Searching for duplicates values in the ar DataFrame.
-# 21,604 raws were found to be duplicated.
-ar.duplicated()
+# Change the date format of nc['appointment_month'].
+nc['appointment_month'] = pd.to_datetime(nc['appointment_month'])
+
+# View the ar DataFrame and columns to determine the format of the dates.
+print(nc.dtypes)
+
+# View the DateFrame.
+nc.head()
 
 
 # In[38]:
 
 
-# Adding a new column to the ar dataframe that states whether the row is a duplicate.
-ar2 = ar.copy()
-ar2['duplicated'] = ar2.duplicated()
-ar2
+# Determine the minimum date in the nc DataFrame.
+# Use appropriate docstrings.
+# Sort column from low to high to determine. 
+print(nc['appointment_date'].sort_values())
+
+# Determine min value (statistical method).
+print(nc['appointment_date'].min())
 
 
 # In[39]:
 
 
-# De-duplicate the ar DataFrame using drop_duplicates().
-# I decided to remove the 21,604 raws that were found to be duplicated in the ar DataFrame.
-ar = ar.drop_duplicates()
-ar.shape
+# Determine the maximum date in the nc DataFrame.
+# Use appropriate docstrings.
+# Determine max value (statistical method).
+print(nc['appointment_date'].max())
+nc.tail()
 
 
 # In[40]:
 
 
-# The 'ar' DataFrame has now 575,217 rows, containing zero duplicates.
-ar.duplicated()
-
-
-# In[41]:
-
-
-# Searching for duplicates values in the nc DataFrame.
-# No duplicates were found.
-nc.duplicated()
-
-
-# **Question 1:** Between what dates were appointments scheduled?
-
-# In[42]:
-
-
-# Importing the nessesary modules.
-import pandas as pd
-import numpy as np
-import datetime
-
-
-# In[43]:
-
-
-# View the ar DataFrame and columns to determine the format of the dates.
+# View the first five rows of appointment_date for the ar DataFrame to determine the date format.
 print(ar.dtypes)
-
-# View the first five rows of appointment_date for the ad DataFrame to determine the date format.
 ar.head()
 
 
-# In[44]:
+# In[41]:
 
 
 # Change the date format of ar['appointment_month'].
@@ -449,196 +468,228 @@ ar['appointment_month'] = pd.to_datetime(ar['appointment_month'])
 # View the ar DataFrame and columns to determine the format of the dates.
 print(ar.dtypes)
 
+# View the DateFrame.
+ar.head()
+
+
+# There are not 'appointment_date' column in the ar DataFrame, hence the day populated under the appointmenth_month column is not correct. 
+# I will use only the month and the year to confirm the minimum and maximum dates in the ar DataFrame.
+
+# In[42]:
+
+
+# Determine the minimum date in the ar DataFrame.
+# Use appropriate docstrings.
+# Sort column from low to high to determine. 
+print(ar['appointment_month'].sort_values())
+
+# Determine min value (statistical method).
+print(ar['appointment_month'].min())
+
+
+# In[43]:
+
+
+# Determine the maximum date in the ar DataFrame.
+# Use appropriate docstrings.
+# Determine max value (statistical method).
+print(ar['appointment_month'].max())
+ar.tail()
+
+
+# Before I can give answers to the following questions, since these questions are not specific to any DataFrame, I assume that these questions refer to the three DataFrames as a whole, so I will merge the three DataFrames.
+# 
+# To be able to merge the three DataFrames, we should have comparable inputs in terms of 'count of apppointmets' aggregated to monthly counts, and zero duplicate values.
+# 
+# Before I merge the three DataFrames, I will create a subset of each DataFrame so that I can include a new column of total_monthly_appointments.
+
+# Date of appointment (appointment_date): The date the appointment was made for by the patient.
+# 
+# Month of appointment (appointment_month): The month in which the appointment is.
+# 
+# Based on the above notes from the metadata, I would use only the appointment_month column from the nc DataFrame, since this column reflects the month in which the appointment is. However, when I search for duplicates, Ptyhon will identify duplicates when the appointment_date is not included in the DataFrame, and I do not feel confident removing any duplicates from the nc DataFrame. So, I will include the appointment_date column.
+
+# In[44]:
+
+
+# Create a subset of the nc DataFrame.
+# Selecting few columns.
+nc_subset = pd.read_excel('national_categories.xlsx', 
+                            usecols=['icb_ons_code','sub_icb_location_name', 'service_setting', 'context_type','national_category','count_of_appointments', 'appointment_date','appointment_month'])
+
+# Print the DataFrame.
+nc_subset.head()
+
 
 # In[45]:
 
 
-# View the ad DataFrame and columns to determine the format of the dates.
-print(ad.dtypes)
-
-# View the first five rows of appointment_date for the nc DataFrame to determine the date format.
-ad.head()
+# Searching for duplicates values in the nc_subset DataFrame before merging the DataFrames.
+# No duplicates were found in the ad DataFrame.
+nc_subset.duplicated()
 
 
 # In[46]:
 
 
-# Change the date format of ad['appointment_date'].
-ad['appointment_date'] = pd.to_datetime(ad['appointment_date'])
+# View the nc_subset DataFrame and columns to determine the format of the dates.
+print(nc_subset.dtypes)
 
-# View the data types of the ad DateFrame.
-print(ad.dtypes)
+# View the first five rows of appointment_date for the nc DataFrame to determine the date format.
+nc_subset.head()
 
 
 # In[47]:
 
 
-# View the nc DataFrame and columns to determine the format of the dates.
-print(nc.dtypes)
+# Change the date format of the 'appointment_month'.
+nc_subset['appointment_month'] = pd.to_datetime(nc_subset['appointment_month'])
+
+# View the nc_subset DataFrame and columns to determine the format of the dates.
+print(nc_subset.dtypes)
 
 
 # In[48]:
 
 
-# Change the date format of nc['appointment_month'].
-nc['appointment_month'] = pd.to_datetime(nc['appointment_month'])
-
-# View the data type of the nc DateFrame.
-print(nc.dtypes)
-nc.head()
+# Aggregating the 'count of appointments' of the nc_subset DataFrame to total monthly appointments.
+t_m_appt_nc_subset = pd.DataFrame(nc_subset.groupby(['icb_ons_code', 'sub_icb_location_name' ,'service_setting', 'context_type', 'national_category','appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+t_m_appt_nc_subset.sort_values(['total_monthly_appointments'],ascending=False)
 
 
-# #### Adding an additional column 'appointment_month' to the ad DataFrame.
-# #### This will allow me to compare the 3 DataFrames by looking at the 'total_monthly_appointments'.
+# I will do the same process with the ar DataFrame and finally I will merge the ad_subset DataFrame.
 
 # In[49]:
 
 
-#Extracting the year from string format date.
-ad['year'] = pd.DatetimeIndex(ad['appointment_date']).year
-ad.head()
+# Create a subset of the ar DataFrame.
+# Selecting few columns.
+ar_subset = pd.read_excel('appointments_regional.xlsx', 
+                            usecols=['icb_ons_code', 'appointment_status', 'hcp_type','appointment_mode', 'time_between_book_and_appointment', 'count_of_appointments', 'appointment_month'])
+
+# Print the DataFrame.
+ar_subset.head()
 
 
 # In[50]:
 
 
-# Creating a new column with month of date field 'appointment_date'.
-ad['month'] = pd.DatetimeIndex(ad['appointment_date']).month
-ad.head()
+# Searching for duplicates values in the ar_subset DataFrame before merging the DataFrames.
+# Duplicates were found.
+ar_subset.duplicated()
 
 
 # In[51]:
 
 
-# Extracting the day/month/year using the to_period function.
-# Where 'D', 'M', 'Y' are inputs.
-ad['appointment_month'] = pd.to_datetime(ad['appointment_date']).dt.to_period('M')
-ad.head()
+# De-duplicate the ar DataFrame using drop_duplicates().
+# I decided to remove the 21,604 raws that were found to be duplicated in the ar DataFrame.
+ar_subset = ar_subset.drop_duplicates()
+ar_subset.shape
 
 
 # In[52]:
 
 
-ad['appointment_month'] = pd.to_datetime(ad['appointment_date'])
-ad.head()
+# View the ar_subset DataFrame and columns to determine the format of the dates.
+print(ar_subset.dtypes)
+
+# View the first five rows of appointment_date for the nc DataFrame to determine the date format.
+ar_subset.head()
 
 
 # In[53]:
 
 
-# View the ad DataFrame and columns to determine the format of the dates.
-print(ad.dtypes)
+# Change the date format of the 'appointment_month'.
+ar_subset['appointment_month'] = pd.to_datetime(ar_subset['appointment_month'])
+
+# View the ar DataFrame and columns to determine the format of the dates.
+print(ar_subset.dtypes)
 
 
 # In[54]:
 
 
-# Determine the minimum and maximum dates in the ad DataFrame.
-# Use appropriate docstrings.
-# Sort column from low to high to determine. 
-print(ad['appointment_month'].sort_values())
-
-# Determine min value (statistical method).
-print(ad['appointment_month'].min())
-ad.head()
+# Aggregating the 'count of appointments' of the ar_subset DataFrame to total monthly appointments.
+t_m_appt_ar_subset = pd.DataFrame(ar_subset.groupby(['icb_ons_code','appointment_status' ,'hcp_type', 'appointment_mode', 'time_between_book_and_appointment', 'appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+t_m_appt_ar_subset.sort_values(['total_monthly_appointments'],ascending=False)
 
 
 # In[55]:
 
 
-# Determine the last (e.g. max()) date of scheduled appointments for the ad DataFrame.
-# Determine max value (statistical method).
-print(ad['appointment_month'].max())
-ad.tail()
+# Aggregating the 'count of appointments' of the ar_subset DataFrame to total monthly appointments.
+t_m_appt_ar_subset = pd.DataFrame(ar_subset.groupby(['icb_ons_code','appointment_status' ,'hcp_type', 'appointment_mode', 'time_between_book_and_appointment']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+t_m_appt_ar_subset.sort_values(['total_monthly_appointments'],ascending=False)
 
 
 # In[56]:
 
 
-# Determine the minimum and maximum dates in the nc DataFrame.
-# Use appropriate docstrings.
-# Sort column from low to high to determine. 
-
-print(nc['appointment_date'].sort_values())
-
-# Determine min value (statistical method).
-print(nc['appointment_date'].min())
-nc.head()
+# Aggregating the 'count of appointments' of the nc_subset DataFrame to total monthly appointments and removing the appointment_month column.
+t_m_appt_nc_subset = pd.DataFrame(nc_subset.groupby(['icb_ons_code', 'sub_icb_location_name' ,'service_setting', 'context_type', 'national_category']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+t_m_appt_nc_subset.sort_values(['total_monthly_appointments'],ascending=False)
 
 
 # In[57]:
 
 
-# Determine the last (e.g. max()) date of scheduled appointments for the nc DataFrame.
-# Determine max value (statistical method).
-print(nc['appointment_date'].max())
-nc.tail()
+# Merging the nc_subset and the ar_subset DataFrames first.
+total_m_appt_nc_ar = pd.merge(t_m_appt_nc_subset, t_m_appt_ar_subset, how='inner', on ='icb_ons_code')
+
+# View the new DataFrame.
+total_m_appt_nc_ar.head()
 
 
 # In[58]:
 
 
-# Determine the minimum and maximum dates in the ar DataFrame.
-# Use appropriate docstrings.
-# Sort column from low to high to determine. 
+# Drop the total 'total_monthly_appointments_x'.
+# Otherwise, Python will not allow me to merge the total_m_appt_nc_ar DataFrame with a third column with the same name.
+# This column seems to reflect the count of records with the same values in that row, and we have the total monthly appointments number in the 'total_monthly_appointments_y'.
+new_total_m_appt_nc_ar = total_m_appt_nc_ar.drop(columns=total_m_appt_nc_ar.columns[5])
 
-print(ar['appointment_month'].sort_values())
-
-# Determine min value (statistical method).
-print(ar['appointment_month'].min())
-ar.head()
+# Print the modified dataframe.
+new_total_m_appt_nc_ar.head()
 
 
-# In[59]:
+# The Kernel died when I tried to merge the DataFrames with the appointment_month columns, hence I decided to group the DataFrames without these columns. 
+# 
+# However, after spending a lot of time trying to merge the three DataFrames, I decided to move on with the analysis without the merge, since I was not felling confident with the outcome that I got, since I could not see the appointment_month, which is the month in which the appointment took place.
+# 
 
-
-# Determine the last (e.g. max()) date of scheduled appointments for the nc DataFrame.
-# Determine max value (statistical method).
-print(ar['appointment_month'].max())
-ar.tail()
-
+# To give answer to the next questions, I will use the nc DataFrame.
 
 # **Question 2:** Which service setting was the most popular for NHS North West London from 1 January to 1 June 2022?
 
 # In[60]:
 
 
-# Create a subset of the nc DataFrame.
-# Selecting few columns.
-nc_subset = pd.read_excel('national_categories.xlsx', 
-                            usecols=['sub_icb_location_name', 'service_setting', 'count_of_appointments', 'appointment_date'])
-
-# Print the DataFrame.
-nc_subset.head()
+# View the nc DataFrame and columns to determine the format of the dates.
+print(nc.dtypes)
 
 
 # In[62]:
 
 
-# View the nc DataFrame and columns to determine the format of the dates.
-print(nc_subset.dtypes)
+# Filtering the nc DataFrame by the specific dates, from 1 January to 1 June 2022.
+nc[(nc['appointment_date'] > '2022-01-01') & (nc['appointment_date'] < '2022-06-01')]
 
 
 # In[63]:
 
 
-# Filtering the DataFrame by the specific dates, from 1 January to 1 June 2022.
-nc_subset[(nc_subset['appointment_date'] > '2022-01-01') & (nc_subset['appointment_date'] < '2022-06-01')]
+# Sorting the nc DataFrame by ''NHS North West London ICB - W2U3'.
+nc_subset.loc[nc_subset['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')]
 
 
 # In[64]:
 
 
-# Sorting the data by ''NHS North West London ICB - W2U3'.
-nc_subset.loc[nc_subset['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')]
-
-
-# In[71]:
-
-
-# For each of these service settings, determine the number of records available for the period and the location. 
+# For each of these service settings, determine the number of records available for the period and the location. 
 # Count the number of records per service_setting.
-ss_count = nc_subset.loc[nc_subset['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')].groupby(['service_setting']).count()
+ss_count = nc.loc[nc['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')].groupby(['service_setting']).count()
 ss_count.sort_values(['count_of_appointments'],ascending=False)
 most_popular_ss = ss_count.sort_values(['count_of_appointments'],ascending=False)
 
@@ -648,261 +699,30 @@ most_popular_ss
 
 # **Question 3:** Which month had the highest number of appointments?
 
-# Before I can give answers to the following questions, since these questions are not specific to any DataFrame, I assume that these questions refer to the three DataFrames as a whole, so I will merge the three DataFrames.
-
-# To be able to merge the three DataFrames, we should have comparable inputs in terms of 'count of apppointmets', being aggregated to monthly counts and the same number of rows in all the DataFrames to be merged.
-
-# ##### Q: I grouped the ar DataFrame
-# #### I want to create a subset of the ar DataFrame that includes this new column of total_monthly_appointments
-# #### Come back and add all the columns I want to have in the merged DataFrame.
-#     
-
-# In[72]:
+# In[65]:
 
 
-# Grouping the ar DataFrame by 'icb_ons_code' and 'appointment_month'.
+# Grouping the nc DataFrame by 'appointment_month' to determine the appointments by month.
 # And aggregating the 'count of appointments' to total monthly appointments.
-total_m_apt_ar = pd.DataFrame(ar.groupby(['icb_ons_code' ,'appointment_status', 'hcp_type', 'appointment_mode', 'appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
-total_m_apt_ar.sort_values(['total_monthly_appointments'],ascending=False)
+nc = pd.DataFrame(nc.groupby(['appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
+nc.sort_values(['total_monthly_appointments'],ascending=False)
 
 
-# In[73]:
+# **Question 4:** What was the total number of records per month?
+
+# In[66]:
 
 
-# Grouping the nc DataFrame by 'icb_ons_code' and 'appointment_month'.
-# And aggregating the 'count of appointments' to total monthly appointments.
-total_m_apt_nc = pd.DataFrame(nc.groupby(['icb_ons_code' ,'service_setting', 'context_type', 'national_category']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
-total_m_apt_nc.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# In[74]:
-
-
-# Grouping the ad DataFrame by 'icb_ons_code' and 'appointment_month'.
-# And aggregating the 'count of appointments' to total monthly appointments.
-total_m_apt_ad = pd.DataFrame(ad.groupby(['icb_ons_code' ,'sub_icb_location_name', 'actual_duration']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
-total_m_apt_ad.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# In[75]:
-
-
-# Merging the nc and the ar DataFrames.
-total_m_apt_nc_ar = pd.merge(total_m_apt_nc, total_m_apt_ar, how='inner', on ='icb_ons_code')
-
-# View the new DataFrame.
-total_m_apt_nc_ar.head()
+# I will use the nc_subset DataFrame.
+nc_subset.head()
 
 
 # In[76]:
 
 
-# Drop the total 'total_monthly_appointments_x'.
-new_total_m_apt_nc_ar = total_m_apt_nc_ar.drop(columns=total_m_apt_nc_ar.columns[4])
-
-# Print the modified dataframe.
-new_total_m_apt_nc_ar.head()
-
-
-# In[77]:
-
-
-# Print the shape of the dataframe.
-new_total_m_apt_nc_ar.shape
-
-
-# In[78]:
-
-
-# Searching for duplicates values in the ar DataFrame.
-# No duplicates were found to be duplicated.
-new_total_m_apt_nc_ar.duplicated()
-
-
-# In[79]:
-
-
-# Merging the 'new_total_m_apt_nc_ar' and the 'total_m_apt_ad' DataFrames.
-total_m_apt_nc_ar_ad = pd.merge(new_total_m_apt_nc_ar, total_m_apt_ad, how='inner', on ='icb_ons_code')
-total_m_apt_nc_ar_ad.head()
-
-
-# In[80]:
-
-
-# Print the shape of the dataframe.
-total_m_apt_nc_ar_ad.shape
-
-
-# In[81]:
-
-
-# Drop the total 'total_monthly_appointments_y'.
-new_total_m_apt_nc_ar_ad = total_m_apt_nc_ar_ad.drop(columns=total_m_apt_nc_ar.columns[9])
-
-# Print the modified dataframe.
-new_total_m_apt_nc_ar_ad.head()
-
-
-# In[82]:
-
-
-# Searching for duplicates values in the ar DataFrame.
-# No duplicates were found to be duplicated.
-new_total_m_apt_nc_ar_ad.duplicated()
-
-
-# #### Even though I already gave answers to the following questions by looking at each DataFrame individually.
-# #### I want to see the outputs generated from the new merged DataFrame.
-
-# #### 2. Between what dates were appointments scheduled?
-
-# In[83]:
-
-
-# Determine the minimum and maximum dates in the ar DataFrame.
-# Use appropriate docstrings.
-# Sort column from low to high to determine. 
-print(new_total_m_apt_nc_ar_ad['appointment_month'].sort_values())
-
-# Determine min value (statistical method).
-print(new_total_m_apt_nc_ar_ad['appointment_month'].min())
-new_total_m_apt_nc_ar_ad.head()
-
-
-# In[84]:
-
-
-# Determine the last (e.g. max()) date of scheduled appointments for the nc DataFrame.
-# Determine max value (statistical method).
-print(new_total_m_apt_nc_ar_ad['appointment_month'].max())
-print(new_total_m_apt_nc_ar_ad.dtypes)
-new_total_m_apt_nc_ar_ad.tail()
-
-
-# In[85]:
-
-
-# Sorting the data by ''NHS North West London ICB - W2U3'.
-new_total_m_apt_nc_ar_ad.loc[new_total_m_apt_nc_ar_ad['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')]
-
-
-# In[86]:
-
-
-# For each of these service settings, determine the number of records available for the period and the location. 
-# Count the number of records per service_setting.
-new_ss_count = new_total_m_apt_nc_ar_ad.loc[new_total_m_apt_nc_ar_ad['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')].groupby(['service_setting']).count()
-new_ss_count.sort_values(['total_monthly_appointments'],ascending=False)
-new_most_popular_ss = new_ss_count.sort_values(['total_monthly_appointments'],ascending=False)
-
-# View the output.
-new_most_popular_ss
-
-
-# #### 3. Which month had the highest number of appointments?
-
-# In[95]:
-
-
-new_total_m_apt_nc_ar_ad.head()
-month_highest_appt.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# In[99]:
-
-
-month_highest_appt = pd.DataFrame(new_total_m_apt_nc_ar_ad.groupby(['appointment_month', 'total_monthly_appointments']))
-month_highest_appt.sort_values(['total_monthly_appointments'],ascending=False)
-month_highest_appt.head()
-
-
-# In[ ]:
-
-
-# Grouping the nc DataFrame by 'icb_ons_code' and 'appointment_month'.
-# And aggregating the 'count of appointments' to total monthly appointments.
-month_highest_appt = pd.DataFrame(new_total_m_apt_nc_ar_ad.groupby(['appointment_month', 'total_monthly_appointments']))
-month_highest_appt.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# In[ ]:
-
-
-new_total_m_apt_nc_ar_ad.sort_values(by=['appointments_month'], ascending=False)
-
-
-# In[ ]:
-
-
-# For each of these service settings, determine the number of records available for the period and the location. 
-# Count the number of records per service_setting.
-new_ss_count = new_total_m_apt_nc_ar_ad.loc[new_total_m_apt_nc_ar_ad['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')].groupby(['service_setting']).count()
-new_ss_count.sort_values(['total_monthly_appointments'],ascending=False)
-new_most_popular_ss = new_ss_count.sort_values(['total_monthly_appointments'],ascending=False)
-
-# View the output.
-new_most_popular_ss
-
-
-new_total_m_apt_nc_ar_ad.sort_values(by=['total_monthly_appointments'], ascending=False)
-
-
-# #### 4. What was the total number of records per month?
-
-# In[153]:
-
-
-# Grouping the nc DataFrame by ''sub_icb_location_name' and 'appointment_month'.
-# And aggregating the 'count of appointments' to monthly counts.
-
-monthly_appointments_count = pd.DataFrame(nc.groupby(['sub_icb_location_name' ,'appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
-monthly_appointments_count.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# In[25]:
-
-
-# Grouping the ad DataFrame by 'sub_icb_location_name' and 'appointment_month'.
-# And aggregating the 'count of appointments' to monthly counts.
-
-ad_total_monthly_appointments_count = pd.DataFrame(ad.groupby(['sub_icb_location_name' ,'appointment_month']).count_of_appointments.sum().reset_index(name='total_monthly_appointments'))
-monthly_appointments_count.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# In[ ]:
-
-
-# Number of appointments per month == sum of count_of_appointments by month.
-# Use the groupby() and sort_values() functions
-
-* # For each of these service settings, determine the number of records available for the period and the location. 
-# Count the number of records per service_setting.
-ss_count = nc_subset.loc[nc_subset['sub_icb_location_name'].str.contains('NHS North West London ICB - W2U3')].groupby(['service_setting']).count()
-ss_count.sort_values(['count_of_appointments'],ascending=False)
-most_popular_ss = ss_count.sort_values(['count_of_appointments'],ascending=False)
-
-# View the output.
-most_popular_ss
-
-
-# In[105]:
-
-
-# Grouping the merged DataFrame by 'appointment_month'.
-# And aggregating the 'total_monthly_appointments' to 'TOTAL_Monthly Appointments'.
-
-TOTAL_m_apt = pd.DataFrame(new_total_m_apt_nc_ar_ad.groupby(['appointment_month', 'total_monthly_appointments']))
-TOTAL_m_apt.sort_values(['total_monthly_appointments'],ascending=False)
-
-
-# **Question 4:** What was the total number of records per month?
-
-# In[ ]:
-
-
 # Total number of records per month.
-new_total_m_apt_nc_ar_ad.sort_values(['appointment_month'],ascending=False)
+records_count = nc_subset.groupby(['appointment_month'])['sub_icb_location_name'].count().reset_index(name='Count')
+records_count.sort_values(by=['Count'], ascending=False)
 
 
 # # 
@@ -911,7 +731,7 @@ new_total_m_apt_nc_ar_ad.sort_values(['appointment_month'],ascending=False)
 
 # ### Create visualisations and identify possible monthly and seasonal trends in the data.
 
-# In[4]:
+# In[77]:
 
 
 # Import the necessary Libraries.
@@ -928,7 +748,7 @@ sns.set(rc={'figure.figsize':(15, 12)})
 sns.set_style('white')
 
 
-# In[5]:
+# In[78]:
 
 
 # Read the Excel file.
@@ -941,7 +761,7 @@ nc = pd.read_excel('national_categories.xlsx')
 nc.head()
 
 
-# In[6]:
+# In[79]:
 
 
 # Determine shape and data types of the national_category data set.
@@ -952,15 +772,11 @@ print(nc.dtypes)
 # ### Objective 1
 # Create three visualisations indicating the number of appointments per month for service settings, context types, and national categories.
 
-# In[7]:
+# In[115]:
 
 
-# Change the data type of the appointment month to string to allow for easier plotting.
+# Aggregate on monthly level and determine the sum of records per month.
 import datetime
-
-
-# In[8]:
-
 
 # Create a subset of the nc DataFrame.
 
@@ -972,7 +788,7 @@ nc_ss_subset = pd.read_excel('national_categories.xlsx',
 nc_ss_subset.head()
 
 
-# In[9]:
+# In[116]:
 
 
 # Extracting the year from string format date.
@@ -980,7 +796,7 @@ nc_ss_subset['year'] = pd.DatetimeIndex(nc_ss_subset['appointment_date']).year
 nc_ss_subset.head()
 
 
-# In[10]:
+# In[117]:
 
 
 # Creating a new column with month of date field 'appointment_date'.
@@ -988,10 +804,9 @@ nc_ss_subset['month'] = pd.DatetimeIndex(nc_ss_subset['appointment_date']).month
 nc_ss_subset.head()
 
 
-# In[11]:
+# In[118]:
 
 
-# Aggregate on monthly level and determine the sum of records per month.
 # Grouping the nc DataFrame by 'service_setting', 'year' and 'month'.
 # And aggregating the 'count of appointments' to monthly counts.
 
@@ -1005,27 +820,30 @@ nc_ss = nc_ss_subset.sort_values(['total_monthly_appointments'],ascending=False)
 nc_ss
 
 
-# In[ ]:
+# In[119]:
 
 
-
+# Aggregate on monthly level and determine the sum of records per month and per service setting.
+records_count_nc_ss = nc_ss.groupby(['service_setting'])['appointment_month'].count().reset_index(name='Count')
+records_count_nc_ss.sort_values(by=['Count'], ascending=False)
 
 
 # **Service settings:**
 
-# In[13]:
+# In[120]:
 
 
 # Plot the appointments over the available date range, and review the service settings for months.
 
 # Create a lineplot.
 total_monthly_appointments_ss = nc_ss['total_monthly_appointments']
-sns.lineplot(x='month', y='total_monthly_appointments', hue= 'service_setting', data=nc_ss)
+sns.lineplot(x='month', y='total_monthly_appointments', hue= 'service_setting', 
+             data=nc_ss, ci=None).set_title("Monthly Appointments by Service Setting", fontsize=16)
 
 
 # **Context types:**
 
-# In[14]:
+# In[121]:
 
 
 # Create a subset of the nc DataFrame to look at context type.
@@ -1038,7 +856,7 @@ nc_ct_subset = pd.read_excel('national_categories.xlsx',
 nc_ct_subset.head()
 
 
-# In[15]:
+# In[122]:
 
 
 # Extracting the year from string format date.
@@ -1046,7 +864,7 @@ nc_ct_subset['year'] = pd.DatetimeIndex(nc_ct_subset['appointment_date']).year
 nc_ct_subset.head()
 
 
-# In[16]:
+# In[123]:
 
 
 # Creating a new column with month of date field 'appointment_date'.
@@ -1054,7 +872,7 @@ nc_ct_subset['month'] = pd.DatetimeIndex(nc_ct_subset['appointment_date']).month
 nc_ct_subset.head()
 
 
-# In[17]:
+# In[124]:
 
 
 # Aggregate on monthly level and determine the sum of records per month.
@@ -1071,18 +889,19 @@ nc_ct = nc_ct_subset.sort_values(['total_monthly_appointments'],ascending=False)
 nc_ct
 
 
-# In[19]:
+# In[125]:
 
 
 # Plot the appointments over the available date range, and review the context types for months.
 # Create a lineplot.
 total_monthly_appointments_ct = nc_ct['total_monthly_appointments']
-sns.lineplot(x='month', y='total_monthly_appointments', hue= 'context_type', data=nc_ct, ci=0)
+sns.lineplot(x='month', y='total_monthly_appointments', hue= 'context_type', 
+             data=nc_ct, ci=0).set_title("Monthly Appointments by Context Type", fontsize=16)
 
 
 # **National categories:**
 
-# In[20]:
+# In[126]:
 
 
 # Create a subset of the nc DataFrame to look at the national categories.
@@ -1095,7 +914,7 @@ nc_nc_subset = pd.read_excel('national_categories.xlsx',
 nc_nc_subset.head()
 
 
-# In[21]:
+# In[127]:
 
 
 # Extracting the year from string format date.
@@ -1103,7 +922,7 @@ nc_nc_subset['year'] = pd.DatetimeIndex(nc_nc_subset['appointment_date']).year
 nc_nc_subset.head()
 
 
-# In[22]:
+# In[128]:
 
 
 # Creating a new column with month of date field 'appointment_date'.
@@ -1111,7 +930,7 @@ nc_nc_subset['month'] = pd.DatetimeIndex(nc_nc_subset['appointment_date']).month
 nc_nc_subset.head()
 
 
-# In[23]:
+# In[129]:
 
 
 # Aggregate on monthly level and determine the sum of records per month.
@@ -1128,13 +947,14 @@ nc_nc = nc_nc_subset.sort_values(['total_monthly_appointments'],ascending=False)
 nc_nc
 
 
-# In[24]:
+# In[131]:
 
 
 # Plot the appointments over the available date range, and review the national categories for months.
 # Create a lineplot.
 total_monthly_appointments_nc = nc_nc['total_monthly_appointments']
-sns.lineplot(x='month', y='total_monthly_appointments', hue= 'national_category', data=nc_nc, ci=0)
+sns.lineplot(x='month', y='total_monthly_appointments', hue= 'national_category', 
+             data=nc_nc, ci=0).set_title("Monthly Appointments by National Category", fontsize=16)
 
 
 # ### Objective 2
@@ -1142,7 +962,7 @@ sns.lineplot(x='month', y='total_monthly_appointments', hue= 'national_category'
 
 # **Summer (August 2021):**
 
-# In[70]:
+# In[132]:
 
 
 # View the output.
@@ -1151,53 +971,59 @@ print(nc_ss.dtypes)
 nc_ss
 
 
-# In[76]:
+# In[139]:
 
 
 # Look at August 2021 in more detail to allow a closer look.
 # Create a lineplot.
 summer = nc_ss.query("appointment_month =='2021-08'")
-sns.lineplot(data=summer, x="appointment_date", y="total_monthly_appointments", hue='service_setting', errorbar=('ci', 0)).set_title("Summer 2021 - Appointments")
+sns.lineplot(data=summer, x="appointment_date", y="total_monthly_appointments", 
+             hue='service_setting', errorbar=('ci', 0)).set_title("Summer 2021 - Appointments", fontsize=16)
 
 
 # **Autumn (October 2021):**
 
-# In[75]:
+# In[140]:
 
 
 # Look at October 2021 in more detail to allow a closer look.
 # Create a lineplot.
 autumn = nc_ss.query("appointment_month =='2021-10'")
-sns.lineplot(data=autumn, x="appointment_date", y="total_monthly_appointments", hue= 'service_setting', errorbar=('ci', 0)).set_title("Autumn 2021 - Appointments")
+sns.lineplot(data=autumn, x="appointment_date", y="total_monthly_appointments", 
+             hue= 'service_setting', errorbar=('ci', 0)).set_title("Autumn 2021 - Appointments", fontsize=16)
 
 
 # **Winter (January 2022):**
 
-# In[74]:
+# In[142]:
 
 
 # Look at January 2022 in more detail to allow a closer look.
 # Create a lineplot.
 winter = nc_ss.query("appointment_month =='2022-01'")
-sns.lineplot(data=winter, x="appointment_date", y="total_monthly_appointments", hue='service_setting', errorbar=('ci', 0)).set_title("Winter 2022 - Appointments")
+sns.lineplot(data=winter, x="appointment_date", y="total_monthly_appointments", 
+             hue='service_setting', errorbar=('ci', 0)).set_title("Winter 2022 - Appointments", fontsize=16)
 
 
 # **Spring (April 2022):**
 
-# In[77]:
+# In[143]:
 
 
 # Look at April 2022 in more detail to allow a closer look.
 # Create a lineplot.
 spring = nc_ss.query("appointment_month =='2022-04'")
-sns.lineplot(data=spring, x="appointment_date", y="total_monthly_appointments", hue='service_setting', errorbar=('ci', 0)).set_title("Spring 2022 - Appointments")
+sns.lineplot(data=spring, x="appointment_date", y="total_monthly_appointments", hue='service_setting', 
+             errorbar=('ci', 0)).set_title("Spring 2022 - Appointments", fontsize=16)
 
+
+# # 
 
 # # Assignment activity 5
 
 # ### Analyse tweets from Twitter with hashtags related to healthcare in the UK.
 
-# In[1]:
+# In[144]:
 
 
 # Libraries and settings needed for analysis
@@ -1214,7 +1040,7 @@ sns.set_style('white')
 pd.options.display.max_colwidth = 200
 
 
-# In[2]:
+# In[145]:
 
 
 # Load the data set.
@@ -1224,7 +1050,7 @@ tweets = pd.read_csv('tweets.csv')
 tweets.head()
 
 
-# In[3]:
+# In[146]:
 
 
 # Explore the metadata.
@@ -1234,14 +1060,14 @@ print(tweets.dtypes)
 tweets.info()
 
 
-# In[4]:
+# In[147]:
 
 
 # Determine the descriptive statistics of the tweets data set. Explore the data set.
 tweets.describe()
 
 
-# In[5]:
+# In[148]:
 
 
 # Searching for duplicates values in the ar DataFrame.
@@ -1249,16 +1075,7 @@ tweets.describe()
 tweets.duplicated()
 
 
-# In[6]:
-
-
-# Adding a new column to the ar dataframe that states whether the row is a duplicate.
-tweets2 = tweets.copy()
-tweets2['duplicated'] = tweets2.duplicated()
-tweets2
-
-
-# In[7]:
+# In[149]:
 
 
 # De-duplicate the tweets DataFrame using drop_duplicates().
@@ -1267,30 +1084,27 @@ tweets = tweets.drop_duplicates()
 tweets.shape
 
 
-# In[8]:
-
-
-# Would it be useful to only look at retweeted and favourite tweet messages?
-# Explain your answer.
-# I think that sorting these two columns by the higuest number of retweets and the most favourite tweets will enable me to identify the most popular tweets by number of retweets and number of times that people marked them as favorites. 
+# **Would it be useful to only look at retweeted and favourite tweet messages? Explain your answer.**
+# 
+# I think that sorting these two columns by the higuest number of retweets and the most favourite tweets will enable me to identify the most popular tweets by number of retweets and number of times that people marked them as favorites.
+# 
 # Afterwards, we will be able to look at the full text and hashtags used.
 
-
-# In[9]:
+# In[150]:
 
 
 # Sorting the data by 'tweet_retweet_count' to find the tweets with the highest number of retweets.
 tweets.sort_values(by=['tweet_retweet_count'], ascending=False)
 
 
-# In[10]:
+# In[151]:
 
 
 # Sorting the data by 'tweet_favorite_count' to find the tweets that were marked the most as favorite.
 tweets.sort_values(by=['tweet_favorite_count'], ascending=False)
 
 
-# In[11]:
+# In[152]:
 
 
 # Create a new DataFrame containing only the text, selecting only 'tweet_full_text'.
@@ -1301,7 +1115,7 @@ tweets_text = pd.read_csv('tweets.csv',
 tweets_text.head()
 
 
-# In[203]:
+# In[153]:
 
 
 # Loop through the messages, and create a list of values containing the # symbol.
@@ -1317,7 +1131,7 @@ top_trending_hashtags = tags
 top_trending_hashtags
 
 
-# In[57]:
+# In[154]:
 
 
 # Create a Pandas Series to count the values in the list. Set the Series equal to tags.
@@ -1326,39 +1140,17 @@ print(tags)
 tags.head(30)
 
 
-# In[223]:
-
-
-hashtags_df.info()
-
-
-# In[26]:
+# In[157]:
 
 
 # Create a Pandas Series to count the values in the list. Set the Series equal to tags.                                 
 tags = pd.DataFrame(tweets_text.groupby(['tweet_full_text']).count())
+
+#Display the first 30 records.
 tags.head(30)
 
 
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[36]:
+# In[158]:
 
 
 # Create a user-defined function using the def keyword.
@@ -1382,7 +1174,7 @@ print(contains_healthcare(x="#healthcare"))
 print(contains_healthcare(x="#Healthcare"))
 
 
-# In[38]:
+# In[159]:
 
 
 # Use the apply() function.
@@ -1396,9 +1188,9 @@ tweets_text[tags_healthcare]
 tweets_text[tags_healthcare].shape
 
 
-# ### A total of 842 hashtags contain the word 'healthcare'. Originally there were 961 unique comments in the tweet_full_text column. Therefore, 87.6% of the tweets contain the word 'healthcare.
+# #### A total of 842 hashtags contain the word 'healthcare'. Originally there were 961 unique comments in the tweet_full_text column. Therefore, 87.6% of the tweets contain the word 'healthcare.
 
-# In[204]:
+# In[160]:
 
 
 # Create a Pandas Series to count the values in the list. Set the Series equal to tags.
@@ -1407,13 +1199,14 @@ print(tags)
 tags.head()
 
 
-# In[63]:
+# In[161]:
 
 
+# Print the data type.
 print(type(tags))
 
 
-# In[200]:
+# In[162]:
 
 
 # Convert the series to a DataFrame in preparation for visualisation.
@@ -1444,7 +1237,7 @@ top_trending_hashtags = pd.DataFrame(frame)
 print(top_trending_hashtags)
 
 
-# In[201]:
+# In[163]:
 
 
 # Count the number of hashtags per tweet_full_text.
@@ -1457,7 +1250,7 @@ top_trending_hashtags = top_trending_hashtags.sort_values(['Count'],ascending=Fa
 top_trending_hashtags
 
 
-# In[226]:
+# In[164]:
 
 
 # Convert the series to a DataFrame in preparation for visualisation.
@@ -1484,7 +1277,7 @@ top_trending_hashtags = pd.DataFrame(frame)
 print(top_trending_hashtags)
 
 
-# In[229]:
+# In[165]:
 
 
 # Convert the series to a DataFrame in preparation for visualisation.
@@ -1507,7 +1300,7 @@ top_trending_hashtags = pd.DataFrame(frame)
 print(top_trending_hashtags)
 
 
-# In[233]:
+# In[166]:
 
 
 # Count the number of unique hashtags.
@@ -1515,25 +1308,14 @@ top_trending_unique_hashtags = top_trending_hashtags.groupby(['Word']).value_cou
 top_trending_unique_hashtags.sort_values(by=['Count'], ascending=False)
 
 
-# # Continue Here
-
-# In[236]:
+# In[167]:
 
 
 # Ensure the count data type is an integer for data analysis.
 print(top_trending_unique_hashtags.dtypes)
 
 
-# In[ ]:
-
-
-# Fix the count datatype.
-
-
-# View the result.
-
-
-# In[241]:
+# In[168]:
 
 
 # Display records where the count is larger than 10.
@@ -1544,7 +1326,7 @@ top_trending_unique_hashtags = top_trending_unique_hashtags.sort_values(['Count'
 top_trending_unique_hashtags
 
 
-# In[243]:
+# In[169]:
 
 
 # Import Matplotlib, Seaborn, and Pandas.
@@ -1555,27 +1337,14 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import *
 
 
-# In[ ]:
-
-
-
-
-
-# In[258]:
+# In[174]:
 
 
 # Create a Seaborn barplot indicating records with a count >10 records.
-sns.barplot(x='Word', y='Count', 
-            data=top_trending_unique_hashtags).set_title("Top Trending Hashtags", fontsize=16, y=0.92)
-
-
-# In[266]:
-
-
 fig, ax = plt.subplots()
 
 sns.barplot(x='Word', y='Count', 
-            data=top_trending_unique_hashtags).set_title("Top Trending Hashtags", fontsize=16, y=0.92)
+            data=top_trending_unique_hashtags).set_title("Twitter - Top Trending Hashtags", fontsize=16, y=0.92)
 
 x_labels = top_trending_unique_hashtags['Word']
 
@@ -1588,9 +1357,9 @@ plt.show()
 
 # # Assignment activity 6
 
-# ### Investigate the main cencerns posted by the NHS. 
+# ### Investigate the main cencerns posed by the NHS. 
 
-# In[267]:
+# In[175]:
 
 
 # Prepare your workstation.
@@ -1601,7 +1370,7 @@ ar = pd.read_csv('appointments_regional.csv')
 ar.head(5)
 
 
-# In[268]:
+# In[176]:
 
 
 # Print the min date.
@@ -1609,7 +1378,7 @@ print(ar['appointment_month'].min())
 ar.head()
 
 
-# In[269]:
+# In[177]:
 
 
 # Print the min date.
@@ -1617,14 +1386,14 @@ print(ar['appointment_month'].max())
 ar.tail()
 
 
-# In[270]:
+# In[178]:
 
 
 # View the data type of the ar DateFrame.
 print(ar.dtypes)
 
 
-# In[271]:
+# In[179]:
 
 
 # Change the date format of ar['appointment_month'].
@@ -1634,7 +1403,7 @@ ar['appointment_month'] = pd.to_datetime(ar['appointment_month'])
 print(ar.dtypes)
 
 
-# In[272]:
+# In[180]:
 
 
 # Filter the data set to only look at data from 2021-08 onwards.
@@ -1646,7 +1415,7 @@ ar
 
 # **Question 1:** Should the NHS start looking at increasing staff levels? 
 
-# In[274]:
+# In[181]:
 
 
 # Create an aggregated data set to review the different features.
@@ -1659,7 +1428,7 @@ ar_agg.sort_values(['total_monthly_appointments'],ascending=False)
 ar_agg
 
 
-# In[285]:
+# In[182]:
 
 
 # Create a new DataFrame (e.g. ar_df) to determine the total number of appointments per month.
@@ -1670,14 +1439,14 @@ ar_df.sort_values(['total_monthly_appointments'],ascending=False)
 ar_df
 
 
-# In[278]:
+# In[183]:
 
 
 # View the data type of the ar DateFrame.
 print(ar_df.dtypes)
 
 
-# In[308]:
+# In[184]:
 
 
 # Add a new column to indicate the average utilisation of services.
@@ -1686,7 +1455,7 @@ ar_ut = ar_df['utilisation'] = ar_df['total_monthly_appointments']/30
 ar_ut
 
 
-# In[309]:
+# In[185]:
 
 
 # Rounding the utilisation column.
@@ -1694,9 +1463,9 @@ ar_ut = ar_df[['appointment_month', 'total_monthly_appointments', 'utilisation']
 ar_ut
 
 
-# ##### Important to note! The NHS can accommodate a maximum of 1,200,000 appointments per day.
+# #### Important to note! The NHS can accommodate a maximum of 1,200,000 appointments per day.
 
-# In[310]:
+# In[186]:
 
 
 # View the data type of the ar DateFrame.
@@ -1706,7 +1475,7 @@ print(ar_df.dtypes)
 ar_df
 
 
-# In[311]:
+# In[187]:
 
 
 # Convert the appointment_month to string data type for ease of visualisation.
@@ -1716,14 +1485,14 @@ date_columns = ar_df.select_dtypes(include=['datetime64']).columns.tolist()
 ar_df[date_columns] = ar_df[date_columns].astype(str)
 
 
-# In[312]:
+# In[188]:
 
 
 # View the data type of the ar DateFrame.
 print(ar_df.dtypes)
 
 
-# In[313]:
+# In[189]:
 
 
 # Plot sum of count of monthly visits.
@@ -1733,14 +1502,14 @@ sns.lineplot(x='appointment_month', y='total_monthly_appointments',
              data=ar_df).set_title("Total Appointments by Month", fontsize=16, y=0.92)
 
 
-# In[314]:
+# In[190]:
 
 
 # View the DataFrame.
 ar_ut
 
 
-# In[316]:
+# In[191]:
 
 
 # Plot monthly capacity utilisation.
@@ -1752,21 +1521,21 @@ sns.lineplot(x='appointment_month', y='utilisation',
 
 # **Question 2:** How do the healthcare professional types differ over time?
 
-# In[317]:
+# In[192]:
 
 
 # View the new aggregated DataFrame.
 ar_agg
 
 
-# In[318]:
+# In[193]:
 
 
 # View the data type of the ar DateFrame.
 print(ar_agg.dtypes)
 
 
-# In[319]:
+# In[194]:
 
 
 # Convert the appointment_month to string data type for ease of visualisation.
@@ -1775,14 +1544,14 @@ date_columns = ar_agg.select_dtypes(include=['datetime64']).columns.tolist()
 ar_agg[date_columns] = ar_agg[date_columns].astype(str)
 
 
-# In[320]:
+# In[195]:
 
 
 # View the data type of the ar DateFrame.
 print(ar_agg.dtypes)
 
 
-# In[328]:
+# In[196]:
 
 
 # Create a line plot to answer the question.
@@ -1793,7 +1562,7 @@ sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='hcp_typ
 
 # **Question 3:** Are there significant changes in whether or not visits are attended?
 
-# In[332]:
+# In[197]:
 
 
 # Create a line plot to answer the question.
@@ -1803,27 +1572,27 @@ sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='appoint
 
 # **Question 4:** Are there changes in terms of appointment type and the busiest months?
 
-# In[337]:
+# In[202]:
 
 
 # Create a line plot to answer the question.
 sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='appointment_mode', errorbar=None,
-             data=ar_agg).set_title("Appointment Type", fontsize=16, y=1)
+             data=ar_agg).set_title("Monthly Appointments by Appointment Mode", fontsize=16, y=1)
 
 
 # **Question 5:** Are there any trends in time between booking an appointment?
 
-# In[335]:
+# In[204]:
 
 
 # Create a line plot to answer the question.
 sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='time_between_book_and_appointment', errorbar=None,
-             data=ar_agg).set_title("Time Between Booking & Appointment", fontsize=16, y=1)
+             data=ar_agg).set_title("Monthly Appointments by Time Between Booking & Appointment", fontsize=16, y=1)
 
 
 # **Question 6:** How do the spread of service settings compare?
 
-# In[340]:
+# In[205]:
 
 
 # Specify the name of the Excel file.
@@ -1833,7 +1602,7 @@ nc = pd.read_excel('national_categories.xlsx')
 nc.head()
 
 
-# In[344]:
+# In[206]:
 
 
 # Let's go back to the national category DataFrame you created in an earlier assignment activity.
@@ -1845,16 +1614,16 @@ nc_ss.sort_values(['total_monthly_appointments'],ascending=False)
 nc_ss
 
 
-# In[345]:
+# In[208]:
 
 
 # Create a boxplot to investigate spread of service settings.
 
 sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='service_setting', errorbar=None,
-             data=nc_ss).set_title("Spread Of Service Settings Over Time", fontsize=16, y=1)
+             data=nc_ss).set_title("Monthly Appointments by Spread Of Service Settings Over Time", fontsize=16, y=1)
 
 
-# In[347]:
+# In[209]:
 
 
 # Create a boxplot to investigate the service settings without GP.
@@ -1862,12 +1631,14 @@ nc_ss_without_GP = nc_ss[nc_ss['service_setting'] != 'General Practice']
 nc_ss_without_GP
 
 
-# In[349]:
+# In[213]:
 
 
 # Create a boxplot based on the order of variables.
-sns.lineplot(x='appointment_month', y='total_monthly_appointments', hue='service_setting', errorbar=None,
-             data=nc_ss_without_GP).set_title("Spread Of Service Settings Over Time - Without GP", fontsize=16, y=1)
+sns.lineplot(x='appointment_month', y='total_monthly_appointments', 
+             hue='service_setting', errorbar=None,
+             data=nc_ss_without_GP).set_title("Monthly Appointments Spread Of Service Settings Over Time - Without GP", 
+                                              fontsize=16, y=1)
 
 
 # # 
